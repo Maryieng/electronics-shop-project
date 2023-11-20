@@ -1,4 +1,5 @@
 import pytest
+
 from src.item import Item
 
 
@@ -18,6 +19,3 @@ def test_apply_discount(item):
 
 def test_all(item):
     assert item in Item.all
-
-
-
