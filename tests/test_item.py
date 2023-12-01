@@ -64,3 +64,15 @@ class ItemTestCase(unittest.TestCase):
         self.assertEqual(Item.all[0].quantity, 3)
         self.assertIsInstance(Item.all[0].price, int)
         self.assertIsInstance(Item.all[0].quantity, int)
+
+
+    def test_repr_str(self):
+        item1 = Item("Смартфон", 10000, 20)
+        assert repr(item1) == "Item('Смартфон', 10000, 20)"
+        assert str(item1) == 'Смартфон'
+
+        item1 = Item("Камера", 100000, 50)
+        assert repr(item1) == "Item('Камера', 100000, 50)"
+        assert str(item1) == 'Камера'
+
+
