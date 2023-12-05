@@ -13,6 +13,14 @@ class Item:
         self.price = price
         self.quantity = quantity
 
+    def __repr__(self) -> str:
+        """ отображение информации об объекте класса в режиме отладки """
+        return f"{self.__class__.__name__}('{self.__name}', {self.price}, {self.quantity})"
+
+    def __str__(self) -> str:
+        """ тображение информации об объекте класса для пользователей """
+        return f"{self.__name}"
+
     @property
     def name(self) -> str:
         """ Возвращает наименование товара. """
@@ -35,7 +43,7 @@ class Item:
         self.price = self.price - self.price * self.pay_rate
 
     @classmethod
-    def instantiate_from_csv(cls, filename):
+    def instantiate_from_csv(cls, filename: str) -> None:
         """инициализирует экземпляры класса Item данными из файла src/items.csv"""
         with open(filename, 'r') as f:
             reader = csv.DictReader(f, delimiter=',')
