@@ -18,8 +18,13 @@ class Item:
         return f"{self.__class__.__name__}('{self.__name}', {self.price}, {self.quantity})"
 
     def __str__(self) -> str:
-        """ тображение информации об объекте класса для пользователей """
+        """ отбражение информации об объекте класса для пользователей """
         return f"{self.__name}"
+
+    def __add__(self, other):
+        if isinstance(other, Item):
+            return int(self.quantity) + int(other.quantity)
+        raise ValueError('Складывать можно только объекты Item и дочерние от них.')
 
     @property
     def name(self) -> str:
