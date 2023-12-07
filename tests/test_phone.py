@@ -5,6 +5,7 @@ def test_number_of_sim_getter():
     phone = Phone("iPhone 14", 120_000, 5, 2)
     phone.number_of_sim = 3
     assert phone.number_of_sim == 3
+    assert phone.__repr__() == "Phone('iPhone 14', 120000, 5, 3)"
 
 
 def test_number_of_sim_setter():
