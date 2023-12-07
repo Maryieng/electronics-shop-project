@@ -3,6 +3,7 @@ import unittest
 import pytest
 
 from src.item import Item
+from src.phone import Phone
 
 
 @pytest.fixture
@@ -73,3 +74,10 @@ class ItemTestCase(unittest.TestCase):
         item1 = Item("Камера", 100000, 50)
         assert repr(item1) == "Item('Камера', 100000, 50)"
         assert str(item1) == 'Камера'
+
+    def test_add(self):
+        phone1 = Phone("iPhone 14", 120_000, 5, 2)
+        item1 = Item("Камера", 100000, 50)
+        assert item1.quantity + phone1.quantity == 55
+        assert item1.quantity + item1.quantity == 100
+        assert phone1.quantity + phone1.quantity == 10
