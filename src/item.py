@@ -1,5 +1,6 @@
 import csv
 import math
+from typing import Any
 
 
 class Item:
@@ -21,7 +22,8 @@ class Item:
         """ отбражение информации об объекте класса для пользователей """
         return f"{self.__name}"
 
-    def __add__(self, other):
+    def __add__(self, other) -> Any:
+        """ Сложение товаров """
         if isinstance(other, Item):
             return int(self.quantity) + int(other.quantity)
         raise ValueError('Складывать можно только объекты Item и дочерние от них.')
