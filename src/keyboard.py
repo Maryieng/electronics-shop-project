@@ -3,22 +3,22 @@ from src.item import Item
 
 class MixinLanguage:
     """ Миксин-класс для хранения и изменения раскладки клавиатуры """
-    def __init__(self) -> None:
+    def __init__(self):
+        """ Инициализация миксина"""
         self.__language = 'EN'
 
     @property
-    def language(self) -> str:
+    def language(self):
+        """ Режим доступа для языка клавиатуры """
         return self.__language
 
-    @language.setter
-    def language(self, language: str) -> None:
-        self.__language = language
-
-    def change_lang(self) -> None:
-        if self.language == "EN":
-            self.language = "RU"
-        elif self.language == "RU":
-            self.language = "EN"
+    def change_lang(self):
+        """ Изменение языка """
+        if self.__language == 'EN':
+            self.__language = 'RU'
+        else:
+            self.__language = 'EN'
+        return self
 
 
 class Keyboard(Item, MixinLanguage):
