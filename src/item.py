@@ -1,12 +1,24 @@
 import csv
 import math
+import os
 from typing import Any
+
+
+class InstantiateCSVError(Exception):
+    """ Обработка исключений при повреждении файла """
+    def __init__(self, message) -> None:
+        """ Инициализация экземпляра класса """
+        self.message = message
+
+    def __str__(self) -> str:
+        """ Вывод информации для пользователя: текст ошибки """
+        return f'{self.message}'
 
 
 class Item:
     """Класс для представления товара в магазине. """
     pay_rate = 1.0
-    all = []
+    all = []   # type: ignore
 
     def __init__(self, name: str, price: float, quantity: int) -> None:
         """ Создание экземпляра класса item."""
@@ -52,14 +64,21 @@ class Item:
     @classmethod
     def instantiate_from_csv(cls, filename: str) -> None:
         """инициализирует экземпляры класса Item данными из файла src/items.csv"""
-        with open(filename, 'r') as f:
-            reader = csv.DictReader(f, delimiter=',')
-            for line in reader:
-                name = line['name']
-                price = Item.string_to_number(line['price'])
-                quantity = int(line['quantity'])
-                item = cls(name, price, quantity)
-                Item.all.append(item)
+        cls.all.clear()
+        path_filename = os.path.join(os.path.dirname(__file__), filename)
+        try:
+            with open(path_filename, newline='') as csvfile:
+                reader = csv.DictReader(csvfile)
+                for line in reader:
+                    if 'name' not in line or 'price' not in line or 'quantity' not in line:
+                        raise InstantiateCSVError('Файл item.csv поврежден')
+                    name = line['name']
+                    price = Item.string_to_number(line['price'])
+                    quantity = int(line['quantity'])
+                    item = cls(name, price, quantity)
+                    Item.all.append(item)
+        except FileNotFoundError:
+            raise FileNotFoundError('Отсутствует файл items.csv')
 
     @staticmethod
     def string_to_number(string: str) -> float:

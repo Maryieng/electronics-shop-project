@@ -2,7 +2,7 @@ import unittest
 
 import pytest
 
-from src.item import Item
+from src.item import InstantiateCSVError, Item
 from src.phone import Phone
 
 
@@ -36,36 +36,6 @@ class ItemTestCase(unittest.TestCase):
     def tearDown(self):
         Item.all = []
 
-    def test_instantiate_from_csv(self):
-        with open(self.sample_csv, 'w') as f:
-            f.write("name,price,quantity\n")
-            f.write("Item 1,10.99,5\n")
-            f.write("Item 2,5.99,3\n")
-
-        Item.instantiate_from_csv(self.sample_csv)
-        self.assertEqual(len(Item.all), 2)
-        self.assertEqual(Item.all[0].name, "Item 1")
-        self.assertEqual(Item.all[0].price, 10)
-        self.assertEqual(Item.all[0].quantity, 5)
-        self.assertEqual(Item.all[1].name, "Item 2")
-        self.assertEqual(Item.all[1].price, 5)
-        self.assertEqual(Item.all[1].quantity, 3)
-
-    def test_nonexistent_csv(self):
-        nonexistent_csv = 'sample.csv'
-        Item.instantiate_from_csv(nonexistent_csv)
-
-    def test_string_conversion(self):
-        with open(self.sample_csv, 'w') as f:
-            f.write("name,price,quantity\n")
-            f.write("Item 1,5,3\n")
-
-        Item.instantiate_from_csv(self.sample_csv)
-        self.assertEqual(Item.all[0].price, 5)
-        self.assertEqual(Item.all[0].quantity, 3)
-        self.assertIsInstance(Item.all[0].price, int)
-        self.assertIsInstance(Item.all[0].quantity, int)
-
     def test_repr_str(self):
         item1 = Item("Смартфон", 10000, 20)
         assert repr(item1) == "Item('Смартфон', 10000, 20)"
@@ -81,3 +51,15 @@ class ItemTestCase(unittest.TestCase):
         assert item1.quantity + phone1.quantity == 55
         assert item1.quantity + item1.quantity == 100
         assert phone1.quantity + phone1.quantity == 10
+
+    def test_instantiate_from_csv(self):
+        Item.instantiate_from_csv("items.csv")
+        self.assertEqual(len(Item.all), 5)
+
+    def test_instantiate_from_csv_file_not_found(self):
+        with self.assertRaises(FileNotFoundError):
+            Item.instantiate_from_csv("nonexistent.csv")
+
+    def test_instantiate_from_csv_corrupted_file(self):
+        with self.assertRaises(InstantiateCSVError):
+            Item.instantiate_from_csv("corrupted.csv")
